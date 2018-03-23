@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+	<Resource
+		name="gusdnPool"
+		type="javax.sql.DataSource"
+		driverClassName="oracle.jdbc.driver.OracleDriver"
+		
+		factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+		username="gusdn"
+		password="gusdn"
+		url="jdbc:oracle:thin:@112.150.121.158:1521:orclServer"
+		maxTotal="10"  
+		maxIdle="10"  
+	/>
+</Context>
+
+	<!-- maxTotal="10"  최대 접속자 수 -->
+<!-- 	maxIdle="10"  미리 준비시킬 db컨넥션 개수 -->
+
+<!-- factory="org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory" -->
+<!-- factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" -->
