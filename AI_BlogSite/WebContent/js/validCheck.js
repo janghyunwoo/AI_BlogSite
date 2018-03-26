@@ -16,6 +16,7 @@ function lessThan(field, charCount) {
 // 그 input에 한글 있으면 true
 // 그 input에 한글 없으면 false
 function containsHangul(field) {
+	alert("dd");
 	var t = "1234567890qwertyuiopasdfghjklzxcvbnm";
 	for (var i = 0; i < field.value.length; i++) {
 		if (t.indexOf(field.value.toLowerCase()[i]) == -1) {

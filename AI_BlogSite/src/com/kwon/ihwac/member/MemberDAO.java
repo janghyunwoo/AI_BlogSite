@@ -139,15 +139,15 @@ public class MemberDAO {
 			con = DBManager.connect();
 
 			String path = request.getServletContext().getRealPath("etc");
-
-			MultipartRequest mr = new MultipartRequest(request, path, 31457280, "euc-kr",
+			System.out.println(path);
+			MultipartRequest mr = new MultipartRequest(request, path, 31457280, "utf-8",
 					new DefaultFileRenamePolicy());
 
-			String im_id = mr.getParameter("im_id");
-			String im_pw = mr.getParameter("im_pw");
+			String id = mr.getParameter("id");
+			String pw = mr.getParameter("pw");
 			// String im_pwChk = mr.getParameter("im_pwChk");
-			String im_name = mr.getParameter("im_name");
-			String im_addr = mr.getParameter("im_addr");
+			String name = mr.getParameter("name");
+			String sex = mr.getParameter("sex");
 			String im_y = mr.getParameter("im_y"); // "1982"
 			String im_m = mr.getParameter("im_m"); // "1"
 			int im_m2 = Integer.parseInt(im_m); // 1
@@ -157,19 +157,19 @@ public class MemberDAO {
 			String im_birthday = String.format("%s%02d%02d", im_y, im_m2, im_d2);
 			// 19820102
 
-			String im_img = mr.getFilesystemName("im_img");
+			String img = mr.getFilesystemName("img");
 //			im_img = URLEncoder.encode(im_img, "euc-kr");
 //			im_img = im_img.replace("+", " ");
 
 			String sql = "insert into ihwac_member values(" + "?, ?, ?, ?," + "to_date(?, 'YYYYMMDD'), " + "?)";
 
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, im_id);
-			pstmt.setString(2, im_pw);
-			pstmt.setString(3, im_name);
-			pstmt.setString(4, im_addr);
+			pstmt.setString(1, id);
+			pstmt.setString(2, pw);
+			pstmt.setString(3, name);
+			pstmt.setString(4, sex);
 			pstmt.setString(5, im_birthday);
-			pstmt.setString(6, im_img);
+			pstmt.setString(6, img);
 
 			if (pstmt.executeUpdate() == 1) {
 				request.setAttribute("r", "회원 가입 성공");

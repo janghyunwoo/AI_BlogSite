@@ -17,6 +17,7 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
     
+	<script type="text/javascript" src="js/validCheck.js" charset="euc-kr"></script>
 	<script type="text/javascript" src="js/check.js" charset="euc-kr"></script>
 	<script type="text/javascript" src="js/go.js" charset="euc-kr"></script>
 
@@ -35,8 +36,8 @@
             <form class="form-signin" action="MemberLoginController" method="post" 
 		name="loginForm" >
                 <span id="reauth-email" class="reauth-email"></span>
-                <input name="im_id" required="required" oninvalid="loginCheck(this);"  oninput="loginCheck(this);" type="text" id="inputEmail" class="form-control" maxlength="10" placeholder="아이디"  autofocus>
-                <input name="im_pw" required="required" oninvalid="loginCheck(this);" oninput="loginCheck(this);"  type="password" id="inputPassword" class="form-control" maxlength="10" placeholder="패스워드" >
+                <input name="im_id"required="required" oninvalid="loginCheck(this);"  oninput="loginCheck(this);" type="text" id="inputEmail" class="form-control" maxlength="10" placeholder="아이디" required autofocus>
+                <input name="im_pw" required="required" oninvalid="loginCheck(this);" oninput="loginCheck(this);"  type="password" id="inputPassword" class="form-control" maxlength="10" placeholder="패스워드" required>
                 <!-- <input id="email" 
            oninvalid="loginCheck(this);" 
            name="email" oninput="loginCheck(this);"  
@@ -72,29 +73,17 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">회원 가입</h4>
 				</div>
-				<form action="MemberJoinController"
-		method="post" enctype="multipart/form-data" 
-	name="joinForm">
+				
 				<div class="modal-body">
-					
-			    <input name="id" required="required" oninvalid="joinCheck(this);"  oninput="joinCheck(this);" type="text" id="inputEmail1" class="form-control" maxlength="10" placeholder="아이디"  autofocus>
-                <input name="pw" required="required" oninvalid="joinCheck(this);" oninput="joinCheck(this);"  type="password" id="inputEmail2" class="form-control" maxlength="10" placeholder="패스워드" >
-					
-				<input name="pwck" required="required" oninvalid="joinCheck(this);" oninput="joinCheck(this);" type="password" placeholder="패스워드 확인 입력" id="inputEmail3" class="form-control"  >
-				<input name="name" required="required" oninvalid="joinCheck(this);" oninput="joinCheck(this);" type="text"  placeholder="이름 입력" id="inputEmail4" class="form-control"   >
-        			<table>
-        				<tr>
-        					<td style="width:40px; ">성별</td>
-        					
-        						<td><div data-toggle="buttons"><label class="btn btn-default btn-circle btn-lg active"><input type="radio" name="sex" value="f"><i class="fas fa-female"></i></label>
-        						<label class="btn btn-default btn-circle btn-lg"><input type="radio" name="sex" value="m"><i class="fas fa-male"></i></label></div></td>
-        				</tr>
-        			</table>
-
-					<table>
-						<tr>
-							<td>
-							        			<select class="form-control" name="values1" >
+					<input type="text" placeholder="아이디 입력" name="id">
+					<input type="password" placeholder="패스워드 입력" name="pw">
+					<input type="password" placeholder="패스워드 확인 입력" name="pwck">
+					<input type="text" placeholder="이름 입력" name="name">
+					       성별 <div data-toggle="buttons">
+          						<label class="btn btn-default btn-circle btn-lg active"><input type="radio" name="q1" value="0"><i class="fas fa-female"></i></label>
+          						<label class="btn btn-default btn-circle btn-lg">       <input type="radio" name="q1" value="1"><i class="fas fa-male"></i></label>
+        					</div>
+        			<select class="form-control" name="values1" >
                     	<option value="">Select one</option>
                     	<option value="1">Option 1</option>
                     	<option value="2">Option 2</option>
@@ -102,80 +91,55 @@
                     	<option value="4">Option 4</option>
                     	
                		 </select>
-							</td>
-
-							<td style=" font-size: 14pt; width: 50px;">년</td>
-							<td>
-							        			<select class="form-control" name="values1" >
+               		 <div class ="birthday">년</div>
+               		 <select class="form-control" name="values2">
                     	<option value="">Select one</option>
                     	<option value="1">Option 1</option>
                     	<option value="2">Option 2</option>
                     	<option value="3">Option 3</option>
                     	<option value="4">Option 4</option>
-                    	
                		 </select>
-							</td>
-							<td style=" font-size: 14pt; width: 50px;">월</td>
-
-							<td>
-							        	<select class="form-control" name="values1" >
+               		 <div class ="birthday">월</div>
+               		 <select class="form-control" name="values2" >
                     	<option value="">Select one</option>
                     	<option value="1">Option 1</option>
                     	<option value="2">Option 2</option>
                     	<option value="3">Option 3</option>
                     	<option value="4">Option 4</option>
-                    	
                		 </select>
-							</td>
-						<td style=" font-size: 14pt;">
-						일
-						</td>
-						</tr>
-					</table>
-
-					<table>
-						<tr>
-							<td>
-							        			<select class="form-control" name="values1" >
-                    	<option value="">집 전화번호</option>
-                    	<option value="1">02</option>
-                    	<option value="2">031</option>
-                    	<option value="3">032</option>
-                    	
+               		 <div class ="birthday">일</div>
+   		 
+					<input type="text" placeholder="이메일 입력" name="email">
+					               		 <select class="form-control" name="values1" >
+                    	<option value="">Select one</option>
+                    	<option value="1">Option 1</option>
+                    	<option value="2">Option 2</option>
+                    	<option value="3">Option 3</option>
+                    	<option value="4">Option 4</option>
                		 </select>
-							</td>
+               		 <div class ="birthday">-</div>
+               		 <select class="form-control" name="values2">
+                    	<option value="">Select one</option>
+                    	<option value="1">Option 1</option>
+                    	<option value="2">Option 2</option>
+                    	<option value="3">Option 3</option>
+                    	<option value="4">Option 4</option>
+               		 </select>
+               		 <div class ="birthday">-</div>
+               		 <select class="form-control" name="values2" >
+                    	<option value="">Select one</option>
+                    	<option value="1">Option 1</option>
+                    	<option value="2">Option 2</option>
+                    	<option value="3">Option 3</option>
+                    	<option value="4">Option 4</option>
+               		 </select>
 
-							<td style=" font-size: 30pt;">-</td>
-							<td>
-							<input type="text" placeholder="중간 번호" name="midnum">
-							</td>
-							<td style=" font-size: 30pt;">-</td>
-
-							<td>
-							<input type="text" placeholder="끝 번호" name="endnum">
-							</td>
-
-						</tr>
-					</table>
-
-
-					<table>
-        				<tr>
-        					<td>사진</td>
-        					
-        						<td>
-        						<input required="required" oninvalid="joinCheck(this);" oninput="joinCheck(this);" name="img" type="file">
-        						</td>
-        				</tr>
-        			</table>
-				
-				
+				<div style="margin-left: 50px;">사진 </div><input name="im_img" type="file">
 
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="add-project" >가입</button>
+					<button type="button" class="add-project" data-dismiss="modal">가입</button>
 				</div>
-				</form>
 			</div>
 		</div>
 	</div>
