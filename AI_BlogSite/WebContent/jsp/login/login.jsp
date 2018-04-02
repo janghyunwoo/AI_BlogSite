@@ -19,7 +19,91 @@
     
 	<script type="text/javascript" src="js/check.js" charset="euc-kr"></script>
 	<script type="text/javascript" src="js/go.js" charset="euc-kr"></script>
+<script type="text/javascript">
+var searchRequestID = new XMLHttpRequest();
+var searchRequestPW = new XMLHttpRequest();
 
+function searchFunctionID() {
+
+	searchRequestID.open("post", "MemberFindIDController?name=" + encodeURIComponent(document.getElementById("name").value) +
+			"&y=" + encodeURIComponent(document.getElementById("y").value) +
+			"&m=" + encodeURIComponent(document.getElementById("m").value) +
+			"&d=" + encodeURIComponent(document.getElementById("d").value)
+			, true);
+	/*json요청/post 형식으로 전송 ///UserSearchServlet?userName=~~~인 uri로 지정/인코딩을 한다/userName을 가지는 id의 값을 가져온다.*/
+	/* document: 현재 문서 내를 뜻함. */
+	searchRequestID.onreadystatechange = searchIDProcessing;
+	
+	//searchRequestID.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	
+	/* 정상적으로 받아오면 searchProcess실행 */
+	searchRequestID.send(null);
+
+}
+
+function searchFunctionPW() {
+	searchRequestPW.open("post", "MemberFindPWController?pw_id=" + encodeURIComponent(document.getElementById("pw_id").value) +
+			"&pw_name=" + encodeURIComponent(document.getElementById("pw_name").value)
+			, true);
+	/*json요청/post 형식으로 전송 ///UserSearchServlet?userName=~~~인 uri로 지정/인코딩을 한다/userName을 가지는 id의 값을 가져온다.*/
+	/* document: 현재 문서 내를 뜻함. */
+	searchRequestPW.onreadystatechange = searchPWProcessing;
+	
+	//searchRequestID.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	
+	/* 정상적으로 받아오면 searchProcess실행 */
+	searchRequestPW.send(null);
+
+}
+
+function searchIDProcessing() {
+	
+	if (searchRequestID.readyState == 4 && searchRequestID.status == 200) {
+
+		var insertResultID = document.getElementById("returnid");
+		
+		//기존에 추가된 dom 노드 삭제 
+		if(insertResultID.hasChildNodes()){
+			insertResultID.removeChild(insertResultID.firstChild);
+		}
+		
+		var hh2 = document.createElement("h2"); // <h2></h2>
+		hh2.textContent = searchRequestID.responseText; // <h2>ㅎㅎㅎ</h2>
+
+		//returnid를 가지고있는 테그에 자식 노드를 더한다.
+		document.getElementById("returnid").appendChild(hh2);
+		
+		//모달창 띄운다
+		$("#resultID").modal();
+		
+		
+		
+	}
+}
+
+function searchPWProcessing() {
+	
+	if (searchRequestPW.readyState == 4 && searchRequestPW.status == 200) {
+		
+		var insertResultPW = document.getElementById("returnpw");
+		
+		//기존에 추가된 dom 노드 삭제 
+		if(insertResultPW.hasChildNodes()){
+			insertResultPW.removeChild(insertResultPW.firstChild);
+		}
+		
+		var hh2 = document.createElement("h2"); // <h2></h2>
+		hh2.textContent = searchRequestPW.responseText; // <h2>ㅎㅎㅎ</h2>
+
+		//returnid를 가지고있는 테그에 자식 노드를 더한다.
+		document.getElementById("returnpw").appendChild(hh2);
+		
+		//모달창 띄운다
+		$("#resultPW").modal();
+		
+	}
+}
+</script>
 </head>
 <body>
 
@@ -30,12 +114,12 @@
     <div class="container">
         <div class="card card-container">
             <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
-            <img id="profile-img" class="profile-img-card" src="etc/jang.jpg" />
+            <img id="profile-img" class="profile-img-card" src="${cookie.lastLoginPicture.value }" />
             <p id="profile-name" class="profile-name-card"></p>
             <form class="form-signin" action="MemberLoginController" method="post" 
 		name="loginForm" >
                 <span id="reauth-email" class="reauth-email"></span>
-                <input name="im_id" required="required" oninvalid="loginCheck(this);"  oninput="loginCheck(this);" type="text" id="inputEmail" class="form-control" maxlength="10" placeholder="아이디"  autofocus>
+                <input name="im_id" value="${cookie.lastLoginID.value }" required="required" oninvalid="loginCheck(this);"  oninput="loginCheck(this);" type="text" id="inputEmail" class="form-control" maxlength="10" placeholder="아이디"  autofocus>
                 <input name="im_pw" required="required" oninvalid="loginCheck(this);" oninput="loginCheck(this);"  type="password" id="inputPassword" class="form-control" maxlength="10" placeholder="패스워드" >
                 <!-- <input id="email" 
            oninvalid="loginCheck(this);" 
@@ -50,11 +134,11 @@
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">로그인</button>
             </form><!-- /form -->
                 <button class="btn btn-lg btn-primary btn-block btn-signin" data-toggle="modal" data-target="#add_project" >회원 가입</button>
-            <a href="#" class="forgot-password">
+            <a href="#" class="forgot-password" data-toggle="modal" data-target="#findID">
                 	아이디 찾기
             </a>
 			/
-            <a href="#" class="forgot-password">
+            <a href="#" class="forgot-password" data-toggle="modal" data-target="#findPW">
                		 패스워드 찾기
             </a>
             <p>
@@ -62,8 +146,132 @@
         </div><!-- /card-container -->
     </div><!-- /container -->
     
+    <!-- 아이디 찾기 Modal -->
+    <div id="findID" class="modal fade" role="dialog" >
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header login-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">아이디 찾기</h4>
+				</div>
 
-<!-- Modal -->
+				<div class="modal-body">
+				<input id="name" required="required" type="text"  placeholder="이름 입력"  class="form-control"   >
+					<table>
+						<tr>
+							<td>
+							   <select id="y" class="form-control">
+						<c:forEach var="y" begin="${curYear - 50 }" end="${curYear }">
+							<option>${y }</option>
+						</c:forEach>
+					</select>
+							</td>
+
+							<td style=" font-size: 14pt; width: 50px;">년</td>
+							<td>
+					<select class="form-control" id="m" >
+                    	<c:forEach var="m" begin="1" end="12">
+							<option>${m }</option>
+						</c:forEach>
+                    	
+               		 </select>
+							</td>
+							<td style=" font-size: 14pt; width: 50px;">월</td>
+
+							<td>
+					<select class="form-control" id="d" >
+                    	<c:forEach var="d" begin="1" end="31">
+							<option>${d }</option>
+						</c:forEach>
+                    	
+               		 </select>
+							</td>
+						<td style=" font-size: 14pt;">
+						일
+						</td>
+						</tr>
+					</table>
+
+				</div>
+				<div class="modal-footer">
+					<button class="add-project" onclick="searchFunctionID()" type="button" >찾기</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	
+	<!-- id 찾기  결과 Modal -->
+    <div id="resultID" class="modal fade" role="dialog" >
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header login-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">아이디 찾기 결과</h4>
+				</div>
+
+				<div id = "returnid" class="modal-body" align="center">
+				
+
+				</div>
+				<div class="modal-footer">
+					<button  class="add-project" data-dismiss="modal" aria-label="Close" >닫기</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	
+	
+	 <!-- 패스워드 찾기 Modal -->
+    <div id="findPW" class="modal fade" role="dialog" >
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header login-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">패스워드 찾기</h4>
+				</div>
+
+				<div class="modal-body">
+				<input id="pw_id" required="required" oninvalid="joinCheck(this);" oninput="joinCheck(this);" type="text"  placeholder="아이디 입력"  class="form-control"   >
+				<input id="pw_name" required="required" oninvalid="joinCheck(this);" oninput="joinCheck(this);" type="text"  placeholder="이름 입력"  class="form-control"   >
+					
+
+				</div>
+				<div class="modal-footer">
+					<button class="add-project" onclick="searchFunctionPW()" type="button">찾기</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	<!-- pw 찾기  결과 Modal -->
+    <div id="resultPW" class="modal fade" role="dialog" >
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header login-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">패스워드 찾기 결과</h4>
+				</div>
+
+				<div id = "returnpw" class="modal-body" align="center">
+				
+
+				</div>
+				<div class="modal-footer">
+					<button  class="add-project" data-dismiss="modal" aria-label="Close" >닫기</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+<!-- 회원 가입 Modal -->
 	<div id="add_project" class="modal fade" role="dialog" >
 		<div class="modal-dialog">
 			<!-- Modal content-->
@@ -87,43 +295,36 @@
         					<td style="width:40px; ">성별</td>
         					
         						<td><div data-toggle="buttons"><label class="btn btn-default btn-circle btn-lg active"><input type="radio" name="sex" value="f"><i class="fas fa-female"></i></label>
-        						<label class="btn btn-default btn-circle btn-lg"><input type="radio" name="sex" value="m"><i class="fas fa-male"></i></label></div></td>
+        						<label class="btn btn-default btn-circle btn-lg"><input type="radio" name="sex" value="m" checked="checked"><i class="fas fa-male"></i></label></div></td>
         				</tr>
         			</table>
 
 					<table>
 						<tr>
 							<td>
-							        			<select class="form-control" name="values1" >
-                    	<option value="">Select one</option>
-                    	<option value="1">Option 1</option>
-                    	<option value="2">Option 2</option>
-                    	<option value="3">Option 3</option>
-                    	<option value="4">Option 4</option>
-                    	
-               		 </select>
+							   <select name="im_y" class="form-control">
+						<c:forEach var="y" begin="${curYear - 50 }" end="${curYear }">
+							<option>${y }</option>
+						</c:forEach>
+					</select>
 							</td>
 
 							<td style=" font-size: 14pt; width: 50px;">년</td>
 							<td>
-							        			<select class="form-control" name="values1" >
-                    	<option value="">Select one</option>
-                    	<option value="1">Option 1</option>
-                    	<option value="2">Option 2</option>
-                    	<option value="3">Option 3</option>
-                    	<option value="4">Option 4</option>
+							        			<select class="form-control" name="im_m" >
+                    	<c:forEach var="m" begin="1" end="12">
+							<option>${m }</option>
+						</c:forEach>
                     	
                		 </select>
 							</td>
 							<td style=" font-size: 14pt; width: 50px;">월</td>
 
 							<td>
-							        	<select class="form-control" name="values1" >
-                    	<option value="">Select one</option>
-                    	<option value="1">Option 1</option>
-                    	<option value="2">Option 2</option>
-                    	<option value="3">Option 3</option>
-                    	<option value="4">Option 4</option>
+							        	<select class="form-control" name="im_d" >
+                    	<c:forEach var="d" begin="1" end="31">
+							<option>${d }</option>
+						</c:forEach>
                     	
                		 </select>
 							</td>
@@ -132,32 +333,6 @@
 						</td>
 						</tr>
 					</table>
-
-					<table>
-						<tr>
-							<td>
-							        			<select class="form-control" name="values1" >
-                    	<option value="">집 전화번호</option>
-                    	<option value="1">02</option>
-                    	<option value="2">031</option>
-                    	<option value="3">032</option>
-                    	
-               		 </select>
-							</td>
-
-							<td style=" font-size: 30pt;">-</td>
-							<td>
-							<input type="text" placeholder="중간 번호" name="midnum">
-							</td>
-							<td style=" font-size: 30pt;">-</td>
-
-							<td>
-							<input type="text" placeholder="끝 번호" name="endnum">
-							</td>
-
-						</tr>
-					</table>
-
 
 					<table>
         				<tr>

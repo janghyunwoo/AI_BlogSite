@@ -30,7 +30,7 @@ function snsWriteCheck() {
 	}
 	return true;
 } 
-function updateCheck() {
+/*function updateCheck() {
 	var idField = document.updateForm.im_id;
 	var pwField = document.updateForm.im_pw;
 	var pwChkField = document.updateForm.im_pwChk;
@@ -72,25 +72,18 @@ function updateCheck() {
 		return false;
 	}
 	return true;
-}
+}*/
 
-function joinCheck(docBox) {
+function updateCheck(docBox) {
 
-	var idField = document.joinForm.id;
-	var pwField = document.joinForm.pw;
-	var pwChkField = document.joinForm.pwck;
-	var nameField = document.joinForm.name;
-	var sexField = document.joinForm.sex;
-	var imgField = document.joinForm.img;
+	var pwField = document.updateForm.pw;
+	var pwChkField = document.updateForm.pwck;
+	var nameField = document.updateForm.name;
+	var sexField = document.updateForm.sex;
+	var imgField = document.updateForm.img;
 	
-	if ((idField.name == docBox.name) && ( isEmpty(idField) || containsHangul(idField))) {
-
-		docBox.setCustomValidity('id 확인!!!@');
-			//idField.value = "";
-			idField.focus();
-			return false;
-		
-	} else if ((pwField.name == docBox.name) && (isEmpty(pwField) || notEquals(pwField, pwChkField)
+	//confirm(sexField.name+":"+docBox.name);
+	if ((pwField.name == docBox.name) && (isEmpty(pwField) || notEquals(pwField, pwChkField)
 			|| lessThan(pwField, 4) || notContains(pwField, "1234567890")
 			|| notContains(pwField, "qwertyuiopasdfghjklzxcvbnm")
 			|| notContains(pwField, "QWERTYUIOPASDFGHJKLZXCVBNM"))) {
@@ -122,8 +115,68 @@ function joinCheck(docBox) {
 	}else {
 		docBox.setCustomValidity('');
     }
+	
 	return true;
 }
+
+function joinCheck(docBox) {
+
+	var idField = document.joinForm.id;
+	var pwField = document.joinForm.pw;
+	var pwChkField = document.joinForm.pwck;
+	var nameField = document.joinForm.name;
+	var sexField = document.joinForm.sex;
+	var imgField = document.joinForm.img;
+	
+	if ((idField.name == docBox.name) && ( isEmpty(idField) || containsHangul(idField))) {
+
+		docBox.setCustomValidity('id 확인!!');
+			//idField.value = "";
+			idField.focus();
+			return false;
+		
+	} else if ((pwField.name == docBox.name) && (isEmpty(pwField) || notEquals(pwField, pwChkField)
+			|| lessThan(pwField, 4) || notContains(pwField, "1234567890")
+			|| notContains(pwField, "qwertyuiopasdfghjklzxcvbnm")
+			|| notContains(pwField, "QWERTYUIOPASDFGHJKLZXCVBNM"))) {
+/*		alert(isEmpty(pwField));
+		alert(notEquals(pwField, pwChkField));
+		alert(lessThan(pwField, 4));
+		alert(notContains(pwField, "1234567890"));
+		alert("pw 확인");*/
+		docBox.setCustomValidity('pw 확인!!');
+		//pwField.value = "";
+		//pwChkField.value = "";
+		pwField.focus();
+		return false;
+	} else if ((nameField.name == docBox.name) && isEmpty(nameField)) {
+		//alert("이름 확인");
+		docBox.setCustomValidity('이름 확인!!');
+		nameField.value = "";
+		nameField.focus();
+		return false;
+	}  else if ((sexField.name == docBox.name) && isEmpty(sexField)) {
+		//alert("이름 확인");
+		docBox.setCustomValidity('성별 확인!!');
+		sexField.value = "";
+		sexField.focus();
+		return false;
+	} else if ((imgField.name == docBox.name) && (isEmpty(imgField)
+			|| (isNotType(imgField, ".png") && isNotType(imgField, ".gif")
+					&& isNotType(imgField, ".jpg") && isNotType(imgField,
+					".bmp")))) {
+		//alert("사진 똑바로");
+		docBox.setCustomValidity('사진 확인!!');
+		imgField.value = "";
+		imgField.focus();
+		return false;
+	}else {
+		docBox.setCustomValidity('');
+    }
+	
+	return true;
+}
+
 
 function loginCheck(textbox) {
 	var idField = document.loginForm.im_id;

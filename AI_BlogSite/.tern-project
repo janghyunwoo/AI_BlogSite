@@ -1,0 +1,39 @@
+{
+  "ecmaVersion": 5,
+  "libs": [
+    "browser",
+    "jquery"
+  ],
+  "plugins": {
+    "jshint": {
+      
+    },
+    "outline": {
+      
+    },
+    "guess-types": {
+      
+    },
+    "chrome-extension": {
+      
+    },
+    "chrome-apps": {
+      
+    },
+    "browser-extension": {
+      
+    },
+    "cordovajs": {
+      
+    },
+    "bootstrap": {
+      
+    },
+    "jquery-ui1-12": {
+      
+    },
+    "jquery-extension": {
+      
+    }
+  }
+}

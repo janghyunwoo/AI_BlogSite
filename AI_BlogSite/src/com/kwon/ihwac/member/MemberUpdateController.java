@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kwon.ihwac.main.DateManager;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 /**
  * Servlet implementation class MemberUpdateController
@@ -32,24 +34,34 @@ public class MemberUpdateController extends HttpServlet {
 			throws ServletException, IOException {
 		if (MemberDAO.getMdao().loginCheck(request, response)) {
 			DateManager.getCurrentYear(request, response);
-			request.setAttribute("contentPage", "member/updateMember.jsp");
+			response.setContentType("text/html;charset=UTF-8");
+			response.getWriter().write("성공");
 		} else {
 			request.setAttribute("contentPage", "home.jsp");
 		}
-		request.getRequestDispatcher("jsp/index.jsp").forward(request, response);
+		//request.getRequestDispatcher("jsp/main/main.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		
+		/*String path = request.getServletContext().getRealPath("etc");
+		System.out.println(path);
+		MultipartRequest mr = new MultipartRequest(request, path, 31457280, "utf-8",
+				new DefaultFileRenamePolicy());
+		
+		System.out.println(mr.getFilesystemName("img"));
+		System.out.println(mr.getParameter("name"));
+		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().write("성공111");*/
+		
 		if (MemberDAO.getMdao().loginCheck(request, response)) {
-			MemberDAO.getMdao().update(request, response);
-			DateManager.getCurrentYear(request, response);
-			request.setAttribute("contentPage", "member/updateMember.jsp");
+			response.setContentType("text/html;charset=UTF-8");
+			
+			response.getWriter().write(MemberDAO.getMdao().update(request, response));
 		} else {
-			request.setAttribute("contentPage", "home.jsp");
+			request.getRequestDispatcher("jsp/login/login.jsp").forward(request, response);
 		}
-		request.getRequestDispatcher("jsp/index.jsp").forward(request, response);
 
 	}
 

@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kwon.ihwac.main.DateManager;
+
 /**
  * Servlet implementation class MemberLogoutController
  */
@@ -26,6 +28,8 @@ public class MemberLogoutController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		MemberDAO.getMdao().defPicture(request, response);
+		DateManager.getCurrentYear(request, response);
 		MemberDAO.getMdao().logout(request, response);
 		//MemberDAO.getMdao().loginCheck(request, response);
 		//request.setAttribute("contentPage", "home.jsp");

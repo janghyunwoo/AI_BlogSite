@@ -6,6 +6,7 @@ create table ihwac_msg(
 	im_date date not null
 );
 create sequence ihwac_msg_seq;
+
 select * from ihwac_msg;
 --------------------------------------------------
 create table ihwac_sns(
@@ -43,14 +44,33 @@ order by is_date;
 --------------------------------------------------
 
 create table member(
-	id 
+	id varchar2(10 char) primary key, 	-- id
+	pw varchar2(10 char) not null, 		-- pw
+	name varchar2(20 char) not null,		-- 이름
+	sex varchar2(2 char) not null,		-- 거주지
+	birthday date not null,				-- 생년월일
+	img varchar2(100 char) not null		-- 사진
 );
 
+select * from member;
 
+insert into MEMBER values('user1','User2','장현우','남','19920620','ㅋㅋ ㅎㅎ.png');
 
+update MEMBER SET id = 'user2';
 
+--------------------------------------------------
 
+create table sns(
+	num number(5) primary key,			-- 글 번호
+	owner varchar2(10 char) not null,	-- 글쓴이 id
+	title varchar2(50 char) not null,
+	txt varchar2(350 char) not null,
+	write_date date not null
+);
 
+drop table sns;
+create sequence sns_seq;
+select * from sns;
 
 
 

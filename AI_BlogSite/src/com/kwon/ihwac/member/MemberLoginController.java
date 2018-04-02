@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kwon.ihwac.main.DateManager;
+
 /**
  * Servlet implementation class MemberLoginController
  */
@@ -34,10 +36,14 @@ public class MemberLoginController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		boolean ok = MemberDAO.getMdao().login(request, response);
+		MemberDAO.getMdao().defPicture(request, response);
+		DateManager.getCurrentYear(request, response);
+		MemberDAO.getMdao().login(request, response);
+		boolean ok = MemberDAO.getMdao().loginCheck(request, response);
 		//MemberDAO.getMdao().loginCheck(request, response);
 		//request.setAttribute("contentPage", "home.jsp");
 		if(ok) {
+			request.setAttribute("contentPage", "../home.jsp");
 			request.getRequestDispatcher("jsp/main/main.jsp").forward(request, response);
 			
 		}else {
