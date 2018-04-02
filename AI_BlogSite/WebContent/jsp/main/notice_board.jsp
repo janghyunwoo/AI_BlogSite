@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 
 <head>
@@ -28,10 +28,71 @@
 
 </style>
 <script type="text/javascript">
-window.onload = function() {
-	getAlltext();
+$(document).ready(function() {
+		getAlltext();
+	});
+function getPageNumber(valueNumber) {
+	//confirm(valueNumber.value);
+	
+	 $.ajax({
+		url : "PageSetNoticeBoardController",
+		type : "post",
+		dataType : "json", // 데이터 타입을 제이슨 꼭해야함, 다른방법도 2가지있음
+		cache : false, // 이걸 안쓰거나 true하면 수정해도 값반영이 잘안댐
+		data :  {
+			"pageNum" : valueNumber.value
+		},
+		success : function(data) {
+			//confirm(data+"asdf");
+			$("#tablebody").html(""); 
+			$("#pageNum").html(""); 
+			//confirm(data.pageCount);
+			$.each(data.NoticeBoards, function(index, NoticeBoards) { // 이치를 써서 모든 데이터들을 배열에 넣음
+				var items = [];
+				items.push("<td>" + NoticeBoards.num + "</td>"); // 여기에 id pw addr tel의 값을 배열에 넣은뒤
+				items.push("<td>" + NoticeBoards.owner + "</td>");
+				items.push("<td>" + NoticeBoards.title + "</td>");
+				items.push("<td>" + NoticeBoards.write_date + "</td>");
+				items.push('<td><a data-toggle="collapse" data-target="#'+NoticeBoards.num+'" ><span class="glyphicon glyphicon-cog"></span></a></td>');
+				
+				$("<tr/>", {
+					addClass: "success",
+					//아래 코드 동작하는 것! js에서도 el 코드 먹힌다.
+					//addClass: "${ 1 == 2? 'warning':'danger'}",
+					html : items
+				// 티알에 붙임,
+				}).appendTo("#tablebody"); // 그리고 그 tr을 테이블에 붙임
+				items = [];
+				items.push('<td colspan="5" style="border-top: none;"><div id="'+NoticeBoards.num+'" class="collapse filter-panel">'+NoticeBoards.txt+'</div></td>');
+				$("<tr/>", {
+					addClass: "success",
+					html : items
+				// 티알에 붙임,
+				}).appendTo("#tablebody"); // 그리고 그 tr을 테이블에 붙임
+				
+			});//each끝
+			
+			for (var i = 1; i <= data.pageCount ; i++) {
+			var page = [];
+			page.push(  '<button id="page'+i+'" onclick="getPageNumber(this)" value="'+i+'" >'+i+'</button>'  );
+					$("<span/>", {
+						//id:'divtest',
+						css: {
+        					//fontWeight: 700,
+        					//color: 'green'
+    					},
+						//style: attr('align','center'),
+						html : page
+					// 티알에 붙임,
+					}).appendTo("#pageNum");
+			}
+			//updateSuccess1(data.resert);
+		},
+		error : function(result) {
+			confirm("서버 오류1");
+		}
+	});
 }
-
 function getAlltext() {
 	$.ajax({
 		url : "NoticeBoardSubmitAllTextController",
@@ -40,10 +101,10 @@ function getAlltext() {
 		cache : false, // 이걸 안쓰거나 true하면 수정해도 값반영이 잘안댐
 		data : Text,
 		success : function(data) {
-			
-
-			
-			//confirm(result.NoticeBoard);
+			$("#tablebody").html(""); 
+			$("#pageNum").html(""); 
+			//$("#pageNum").html(""); 
+			//confirm(data.pageCount);
 			$.each(data.NoticeBoards, function(index, NoticeBoards) { // 이치를 써서 모든 데이터들을 배열에 넣음
 				var items = [];
 				items.push("<td>" + NoticeBoards.num + "</td>"); // 여기에 id pw addr tel의 값을 배열에 넣은뒤
@@ -60,26 +121,43 @@ function getAlltext() {
 				
 				$("<tr/>", {
 					addClass: "success",
+					//아래 코드 동작하는 것! js에서도 el 코드 먹힌다.
+					//addClass: "${ 1 == 2? 'warning':'danger'}",
 					html : items
 				// 티알에 붙임,
-				}).appendTo("#table"); // 그리고 그 tr을 테이블에 붙임
+				}).appendTo("#tablebody"); // 그리고 그 tr을 테이블에 붙임
 				items = [];
 				items.push('<td colspan="5" style="border-top: none;"><div id="'+NoticeBoards.num+'" class="collapse filter-panel">'+NoticeBoards.txt+'</div></td>');
 				$("<tr/>", {
 					addClass: "success",
 					html : items
 				// 티알에 붙임,
-				}).appendTo("#table"); // 그리고 그 tr을 테이블에 붙임
+				}).appendTo("#tablebody"); // 그리고 그 tr을 테이블에 붙임
 				
 			});//each끝
-
+			
+			for (var i = 1; i <= data.pageCount ; i++) {
+			var page = [];
+			
+			page.push(  '<button id="page'+i+'" onclick="getPageNumber(this)" value="'+i+'" >'+i+'</button>'  );
+					$("<span/>", {
+						//id:'divtest',
+						//attr('align','center'),
+						css: {
+        					//fontWeight: 700,
+        					//color: 'green'
+    					},
+						html : page
+					// 티알에 붙임,
+					}).appendTo("#pageNum");
+			}
 			//updateSuccess1(data.resert);
 
 		},
 		error : function(result) {
-			confirm("서버 오류");
+			confirm("서버 오류2");
 		}
-
+ 
 	});
 }
 
@@ -171,7 +249,7 @@ function writeCheckGo(textbox) {
 
 			},
 			error : function(result) {
-				confirm("서버 오류");
+				confirm("서버 오류3");
 			}
 
 		});
@@ -235,12 +313,12 @@ function writeCheckGo(textbox) {
 
 				<div class="panel panel-default">
 					<div class="panel-body">
-						<form class="form-inline" role="form">
+						<form class="form-inline" role="form" onsubmit="return false;">
 							
 							<!-- form group [rows] -->
 							<div class="panel-body">
 								<div class="table-responsive">
-									<table class="table" id="table">
+									<table class="table" >
 										<thead>
 											<tr>
 												<th>글번호</th>
@@ -250,7 +328,7 @@ function writeCheckGo(textbox) {
 												<th>버튼</th>
 											</tr>
 										</thead>
-										<tbody >
+										<tbody id='tablebody'>
 											<!-- <tr class="success">
 												<td>1</td>
 												<td>Mark</td>
@@ -297,6 +375,7 @@ function writeCheckGo(textbox) {
 
 										</tbody>
 									</table>
+										<div id ='pageNum' align="center" ></div>
 								</div>
 							</div>
 						</form>

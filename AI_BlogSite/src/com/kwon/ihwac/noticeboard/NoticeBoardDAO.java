@@ -113,22 +113,7 @@ public class NoticeBoardDAO {
 				NoticeBoards.add(null);*/
 			}
 			
-			ObjectMapper mapper = new ObjectMapper();
 			
-			 HashMap<String,Object> map=new HashMap<String,Object>();
-			 map.put("NoticeBoards",NoticeBoards);
-			 map.put("resert","등록 성공");
-
-			 JSONObject jsonObject= new JSONObject();
-
-			 jsonObject.putAll(map);
-			
-
-			 try {
-					response.getWriter().print(mapper.writeValueAsString(jsonObject));
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
 
 			// request.setAttribute("comments", comments);
 
@@ -150,6 +135,42 @@ public class NoticeBoardDAO {
 		}
 	}
 
-	
+	public void paging(int page, HttpServletRequest request, HttpServletResponse response) {
+		// 전체 페이지 수 계산
+		double cnt = 12; // 한 페이지당 나올 후기 수
+		int commentsSize = NoticeBoards.size(); // 총 후기 수
+		int pageCount = (int) Math.ceil(commentsSize / cnt);
+		//request.setAttribute("pageCount", pageCount);
+
+		int start = commentsSize - ((int) cnt * (page - 1));
+		int end = (page == pageCount) ? -1 : start - ((int) cnt + 1);
+
+		ArrayList<NoticeBoard> comments2 = new ArrayList<>();
+
+		// 22 21 20 19 18 17 16 15 14 13
+		for (int i = start - 1; i > end; i--) {
+			comments2.add(NoticeBoards.get(i));
+		}
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		 HashMap<String,Object> map=new HashMap<String,Object>();
+		 map.put("NoticeBoards",comments2);
+		 map.put("resert","등록 성공");
+		 map.put("pageCount",pageCount);
+
+		 JSONObject jsonObject= new JSONObject();
+
+		 jsonObject.putAll(map);
+		
+
+		 try {
+				response.getWriter().print(mapper.writeValueAsString(jsonObject));
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+
+		//request.setAttribute("comments", comments2);
+	}
 
 }
