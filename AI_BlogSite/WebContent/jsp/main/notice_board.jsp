@@ -213,37 +213,6 @@ function writeCheckGo(textbox) {
 			},
 			success : function(data) {
 				
-				
-				var key = Object.keys(data["NoticeBoards"][0]); // id , pw , addr , tel 의 키값을 가져옴
-				$("<tr>" , {
-					
-					html : "<td>" + key[0] + "</td>"+  // 컬럼명들
-							"<td>" + key[1] + "</td>"+
-							"<td>" + key[2] + "</td>"+
-							"<td>" + key[3] + "</td>"+
-							"<td>" + key[4] + "</td>"
-				}).appendTo("#table") // 이것을 테이블에붙임
-				
-				//confirm(result.NoticeBoard);
-				$.each(data.NoticeBoards, function(index, NoticeBoards) { // 이치를 써서 모든 데이터들을 배열에 넣음
-					var items = [];
-					items.push("<td>" + NoticeBoards.num + "</td>"); // 여기에 id pw addr tel의 값을 배열에 넣은뒤
-					items.push("<td>" + NoticeBoards.owner + "</td>");
-					items.push("<td>" + NoticeBoards.title + "</td>");
-					items.push("<td>" + NoticeBoards.txt + "</td>");
-					items.push("<td>" + NoticeBoards.write_date + "</td>");
-
-/* 					confirm(NoticeBoards.num);
-					confirm(NoticeBoards.owner);
-					confirm(NoticeBoards.title);
-					confirm(NoticeBoards.txt);
-					confirm(NoticeBoards.write_date); */
-					
-					$("<tr/>", {
-						html : items
-					// 티알에 붙임,
-					}).appendTo("#table"); // 그리고 그 tr을 테이블에 붙임
-				});//each끝
 
 				updateSuccess1(data.resert);
 

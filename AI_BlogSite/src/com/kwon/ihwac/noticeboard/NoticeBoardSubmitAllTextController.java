@@ -47,7 +47,7 @@ public class NoticeBoardSubmitAllTextController extends HttpServlet {
 			response.setContentType("text/html;charset=UTF-8");
 			
 			NoticeBoardDAO.getMdao().getAllNoticeBoard(request, response);
-			NoticeBoardDAO.getMdao().paging(1, request, response);;
+			NoticeBoardDAO.getMdao().paging(1, request, response);
 			
 		} else {
 			request.getRequestDispatcher("jsp/login/login.jsp").forward(request, response);

@@ -75,7 +75,7 @@ public class RegisterNoticeBoardController extends HttpServlet {
 			
 			NoticeBoardDAO.getMdao().getAllNoticeBoard(request, response);
 
-
+			NoticeBoardDAO.getMdao().paging(1, request, response);
 			
 		} else {
 			request.getRequestDispatcher("jsp/login/login.jsp").forward(request, response);
